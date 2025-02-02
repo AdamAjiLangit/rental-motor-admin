@@ -51,7 +51,11 @@ export function CardHoverEffect() {
 
     if (error) {
         return <div>Error fetching data: {error.message}</div>;
-    }
+    };
+
+    if (typeof window !== 'undefined') {
+        console.log("Window Test");
+    };
 
     return (
         <div className="w-full mt-6">

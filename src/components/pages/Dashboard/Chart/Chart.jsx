@@ -16,6 +16,11 @@ const ChartComponent = () => {
     const [activeComponent, setActiveComponent] = useState('chartDay');
     const [totalHistory, setTotalHistory] = useState(0);
     const token = Cookies.get('token');
+
+    if (typeof window !== 'undefined') {
+        console.log("Window Test");
+    };
+
     const [chartData, setChartData] = useState({
         type: 'line',
         height: 240,
