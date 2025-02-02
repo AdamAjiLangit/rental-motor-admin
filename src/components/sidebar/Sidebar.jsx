@@ -64,6 +64,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         setIsOpen((prev) => !prev);
     };
 
+    if (typeof window !== 'undefined') {
+        console.log("Window Test");
+    };
+
     return (
         <motion.aside
             initial={{ width: isOpen ? 325 : 120 }}

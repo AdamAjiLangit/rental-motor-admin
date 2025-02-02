@@ -15,6 +15,12 @@ const DashboardComponent = () => {
         }, 2000);
     }, []);
 
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            console.log("Window Test");
+        }
+    }, []);
+
     return (
         <div className='min-h-screen'>
             {isLoading ? (

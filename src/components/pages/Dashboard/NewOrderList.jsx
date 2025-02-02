@@ -6,6 +6,10 @@ import { FaMotorcycle, FaWhatsapp } from 'react-icons/fa';
 import { Clock } from 'lucide-react';
 
 const NewOrderList = ({ }) => {
+    if (typeof window !== 'undefined') {
+        console.log("Window Test");
+    };
+
     return (
         <div>
             <Card className="max-w-[400px] bg-[#1A1F1F]">

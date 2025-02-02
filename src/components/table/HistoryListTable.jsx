@@ -110,6 +110,10 @@ export default function HistoryListTable() {
         setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
     }, [filteredData]);
 
+    if (typeof window !== 'undefined') {
+        console.log("Window Test");
+    };
+
     return (
         <>
             <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-10'>
