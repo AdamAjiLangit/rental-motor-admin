@@ -13,7 +13,7 @@ const NewOrderList = ({ }) => {
     return (
         <div>
             <Card className="max-w-[400px] bg-[#1A1F1F]">
-                <CardHeader className="flex flex-col md:flex-row items-start justify-start gap-2 md:items-center md:justify-between">
+                <CardHeader className="flex flex-col md:flex-row items-start justify-start gap-2 md:items-center md:justify-between z-[1]">
                     <div className='flex gap-2'>
                         <Image
                             alt="heroui logo"

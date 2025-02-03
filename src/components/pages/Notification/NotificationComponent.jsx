@@ -17,7 +17,7 @@ const NotificationComponent = () => {
     return (
         <div className='min-h-screen'>
             <Card className="bg-[#1A1F1F]">
-                <CardHeader className="flex flex-col md:flex-row items-start justify-start gap-2 md:items-center md:justify-between">
+                <CardHeader className="flex flex-col md:flex-row items-start justify-start gap-2 md:items-center md:justify-between z-[1]">
                     <div className='flex gap-2'>
                         <Image
                             alt="heroui logo"
@@ -35,14 +35,14 @@ const NotificationComponent = () => {
                 <Divider className='bg-white my-2' />
                 <CardBody>
                     <p className='text-white'>Adam ingin menyewa motor XSR, apakah anda menyetujui pemintaan ini?</p>
-                    <div className='flex items-center gap-2'>
+                    <div className='flex items-center gap-2 mb-5'>
                         <p className='text-primary'>Total Pembayaran</p>
                         <p className='text-white font-poppinsSemiBold'>Rp. 100.000</p>
                     </div>
+                    <Button color='primary' className='w-fit font-poppinsMedium'>Lihat Detail</Button>
                 </CardBody>
                 <Divider className='bg-white my-2' />
-                <CardFooter className='flex items-center justify-between'>
-                    <Button color='primary' className='font-poppinsMedium'>Lihat Detail</Button>
+                <CardFooter className='flex items-center justify-end'>
                     <div className='flex items-center gap-3'>
                         <Button color='danger' onPress={onCancel} className='font-poppinsMedium text-white'>Batal</Button>
                         <Modal
