@@ -68,17 +68,17 @@ export default function HeaderComponent() {
             </NavbarBrand>
 
             <NavbarContent as="div" justify="end">
-                <Button isIconOnly onPress={() => handleNavigation("/admin/profil")} className={`relative hidden md:block bg-[#1A1F1F] p-2 rounded-xl ${pathname === '/admin/profil' ? 'bg-primary' : ''}`}>
+                <Button isIconOnly onPress={() => handleNavigation("/admin/profil")} className={`relative bg-[#1A1F1F] rounded-xl ${pathname === '/admin/profil' ? 'bg-primary' : ''}`}>
                     <IconUserFilled size={25} className="text-white text-lg" />
                 </Button>
-                <Button isIconOnly onPress={() => handleNavigation("/admin/notifikasi")} className={`relative mr-1 md:mr-7 hidden md:block bg-[#1A1F1F] p-2 rounded-xl ${pathname === '/admin/notifikasi' ? 'bg-primary' : ''}`}>
+                <Button isIconOnly onPress={() => handleNavigation("/admin/notifikasi")} className={`relative mr-1 md:mr-7 bg-[#1A1F1F] rounded-xl ${pathname === '/admin/notifikasi' ? 'bg-primary' : ''}`}>
                     <IoNotifications size={25} className="text-white text-lg" />
                 </Button>
-                <div className='flex items-center justify-center cursor-default gap-1 md:gap-5'>
+                <div className='hidden items-center justify-center md:flex cursor-default gap-1 md:gap-5'>
                     <Avatar
                         isBordered
                         as="text"
-                        className="transition-transform hidden md:block"
+                        className="transition-transform"
                         color='primary'
                         name="Jason Hughes"
                         size="sm"
