@@ -1,14 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Navbar, NavbarBrand, NavbarContent, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, NavbarItem, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Button, Divider } from "@nextui-org/react";
 import { IoNotifications, IoSettings } from 'react-icons/io5';
 import { toast } from 'react-hot-toast';
 import { IconUserFilled } from '@tabler/icons-react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function HeaderComponent() {
     const [isOpen, setIsOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const [userImage, setUserImage] = useState(null);
+    const token = Cookies.get('token');
+    const userId = Cookies.get('userId');
     const pathname = usePathname();
     const router = useRouter();
 
@@ -43,6 +49,24 @@ export default function HeaderComponent() {
                 return 'Beranda';
         }
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/detail/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                console.log(response.data.user);
+                setUser(response.data.user);
+                setUserImage(`${process.env.NEXT_PUBLIC_API_URL}/storage/${response.data.user?.gambar}`);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, []);
 
     const handleNavigation = async (path) => {
         if (pathname === path) return;
@@ -81,10 +105,10 @@ export default function HeaderComponent() {
                         className="transition-transform"
                         color='primary'
                         name="Jason Hughes"
-                        size="sm"
-                        src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                        size="md"
+                        src={userImage}
                     />
-                    <p className='text-white text-sm md:text-base'>John Doe</p>
+                    <p className='text-white text-sm md:text-base'>{user?.nama_pengguna}</p>
                 </div>
                 <NavbarMenu className='mt-5 bg-zinc-800'>
                     {menuItems.map((item, index) => (
