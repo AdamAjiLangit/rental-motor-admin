@@ -14,7 +14,9 @@ const Dashboard = () => {
         }
     }, []);
 
-    return <DashboardComponent />;
+    return <div className="min-h-screen bg-[#060E0E]">
+        <DashboardComponent />
+    </div>;
 };
 
 export default Dashboard;
