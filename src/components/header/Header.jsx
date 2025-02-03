@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Navbar, NavbarBrand, NavbarContent, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, NavbarItem, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Button, Divider } from "@nextui-org/react";
 import { IoNotifications, IoSettings } from 'react-icons/io5';
+import { IoIosArrowDown } from "react-icons/io";
 import { toast } from 'react-hot-toast';
-import { IconUserFilled } from '@tabler/icons-react';
+import { IconDoorExit, IconUserFilled } from '@tabler/icons-react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -98,18 +99,35 @@ export default function HeaderComponent() {
                 <Button isIconOnly onPress={() => handleNavigation("/admin/notifikasi")} className={`relative mr-1 md:mr-7 bg-[#1A1F1F] rounded-xl ${pathname === '/admin/notifikasi' ? 'bg-primary' : ''}`}>
                     <IoNotifications size={25} className="text-white text-lg" />
                 </Button>
-                <div className='hidden items-center justify-center md:flex cursor-default gap-1 md:gap-5'>
-                    <Avatar
-                        isBordered
-                        as="text"
-                        className="transition-transform"
-                        color='primary'
-                        name="Jason Hughes"
-                        size="md"
-                        src={userImage}
-                    />
-                    <p className='text-white text-sm md:text-base'>{user?.nama_pengguna}</p>
-                </div>
+                <Dropdown placement="bottom-end">
+                    <DropdownTrigger>
+                        <div className='hidden items-center justify-center md:flex gap-1 md:gap-5'>
+                            <Avatar
+                                isBordered
+                                as="text"
+                                className="transition-transform"
+                                color='primary'
+                                name="Jason Hughes"
+                                size="md"
+                                src={userImage}
+                            />
+                            <p className='text-white text-sm md:text-base'>{user?.nama_pengguna}</p>
+                            <IoIosArrowDown className='text-[#64748B]' />
+                        </div>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label="Profile Actions" variant="flat">
+                        <DropdownItem key="profile" className="h-14 gap-2">
+                            <span className="font-semibold">Masuk sebagai </span>
+                            <span className="font-semibold">{user?.email}</span>
+                        </DropdownItem>
+                        <DropdownItem key="logout" color="danger">
+                            <div className='flex items-center gap-2 text-danger-500'>
+                                <IconDoorExit size={20} className="mr-2" />
+                                <p>Keluar</p>
+                            </div>
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
                 <NavbarMenu className='mt-5 bg-zinc-800'>
                     {menuItems.map((item, index) => (
                         <NavbarMenuItem key={`${item}-${index}`} className='flex flex-col'>
