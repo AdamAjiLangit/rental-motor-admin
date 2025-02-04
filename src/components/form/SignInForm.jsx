@@ -68,11 +68,13 @@ const SignInForm = () => {
                         </CardHeader>
                         <CardBody>
                             <Form className="space-y-5 text-white">
-                                <InputField name="email" type="email" placeholder="Enter your email" required />
-                                <InputField name="password" type="password" placeholder="Enter your password" required />
-                                <Link href="/forgotPassword" className="hover:underline flex items-end justify-end">
+                                <div className='flex flex-col gap-5 mb-5'>
+                                    <InputField label="email" name="email" type="email" placeholder="Enter your email" required />
+                                    <InputField label="password" name="password" type="password" placeholder="Enter your password" required />
+                                </div>
+                                {/* <Link href="/forgotPassword" className="hover:underline flex items-end justify-end">
                                     <p className="text-gray-400 text-sm md:text-base">Forgot password?</p>
-                                </Link>
+                                </Link> */}
                                 <Button radius="lg" className="w-full bg-[#18B3AB] text-white text-sm md:text-base" type="submit" isLoading={isSubmitting}>
                                     Sign In
                                 </Button>
