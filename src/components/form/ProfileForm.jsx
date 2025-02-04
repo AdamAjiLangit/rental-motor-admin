@@ -65,7 +65,10 @@ const ProfileForm = () => {
                     </div>
                     <div className='flex flex-col md:flex-row gap-5 '>
                         <TextareaField name="alamat" placeholder="Masukkan alamat" customClassname="w-full" />
-                        <InputField name="nomor hP" type="number" placeholder="Masukkan nomor hp" customClassname="w-full" />
+                        <div className='flex flex-col gap-1 w-full'>
+                            <InputField name="nomor hP" type="number" placeholder="Masukkan nomor hp" customClassname="w-full" />
+                            <p className='text-sm text-default-400'>Contoh: 08xxxxxxx</p>
+                        </div>
                     </div>
                     <Button radius="md" className="bg-primary w-fit text-white text-sm" type="submit" isLoading={isSubmitting}>
                         Simpan

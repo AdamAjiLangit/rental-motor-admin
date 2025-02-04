@@ -1,9 +1,15 @@
-import React from 'react'
+"use client";
+
+import dynamic from "next/dynamic";
+
+const AddMotorComponent = dynamic(() => import('@/components/pages/MotorList/addMotor/AddMotorComponent'), {
+    ssr: false,
+});
 
 const AddMotor = () => {
     return (
-        <div>
-            
+        <div className="min-h-screen bg-[#060E0E]">
+            <AddMotorComponent />
         </div>
     )
 }

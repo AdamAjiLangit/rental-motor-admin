@@ -46,6 +46,12 @@ export default function HeaderComponent() {
                 return 'Notifikasi';
             case '/admin/profil':
                 return 'Profil';
+            case '/admin/daftarMotor/tambahMotor':
+                return 'Tambah Motor';
+            case '/admin/daftarMotor/editMotor':
+                return 'Edit Motor';
+            case '/admin/daftarMotor/detailMotor':
+                return 'Detail Motor';
             default:
                 return 'Beranda';
         }

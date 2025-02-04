@@ -5,20 +5,20 @@ import { Input } from "@nextui-org/input";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
 
-const InputField = ({ name, type, placeholder, customClassname, inputClassName, required }) => {
+const InputField = ({ name, type, label, placeholder, customClassname, inputClassName, required }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
         <Field name={name}>
             {({ field, meta }) => (
                 <div className={`relative ${customClassname}`}>
-                    <label htmlFor={name} className="capitalize text-sm md:text-base">{name}</label>
+                    <label htmlFor={label} className="capitalize text-sm md:text-base">{label}</label>
                     <div className={`relative w-full mt-2 ${type === 'number' ? 'flex items-center' : ''}`}>
-                        {type === 'number' && (
+                        {/* {type === 'number' && (
                             <div className='bg-[#F4F4F5] p-[9px] rounded-xl z-50'>
                                 <span className="text-[#71717A]">+62</span>
                             </div>
-                        )}
+                        )} */}
                         <Input
                             id={name}
                             type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
