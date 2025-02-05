@@ -17,10 +17,10 @@ export const HoverEffect = ({
       {items.map((item, idx) => (
         <div
           key={idx}
-          className="relative group  block p-1.5 h-full w-full"
+          className="relative group block pr-3 py-1.5 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}>
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
                 className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block  rounded-3xl"
@@ -35,7 +35,7 @@ export const HoverEffect = ({
                   transition: { duration: 0.15, delay: 0.2 },
                 }} />
             )}
-          </AnimatePresence>
+          </AnimatePresence> */}
           <StatCard
             icon={item.icon}
             title={item.title}

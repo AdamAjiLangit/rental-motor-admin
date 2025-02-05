@@ -17,9 +17,9 @@ import InputField from '../InputField/InputField';
 import toast from 'react-hot-toast';
 import SelectField from '../SelectField.jsx/SelectField';
 import { IoArrowBack, IoInformationCircleOutline } from 'react-icons/io5';
-import FetchAddMotor from '@/lib/CRUD/fetchAddMotor';
+import FetchAddDiscount from '@/lib/CRUD/fetchAddDiscount';
 
-const AddMotorForm = () => {
+const AddDiscountForm = () => {
     const router = useRouter();
     const pathname = usePathname();
 
@@ -69,30 +69,28 @@ const AddMotorForm = () => {
 
     const handleSubmit = async (values, actions) => {
         const loading = toast.loading('Loading...');
+
         try {
             if (!selectedFile) {
-                toast.error("Harap unggah gambar motor!");
+                toast.error("Harap unggah gambar diskon!");
                 toast.dismiss(loading);
                 return;
             };
 
-            const data = await FetchAddMotor(
+            const data = await FetchAddDiscount(
                 selectedFile,
-                values.motorname,
-                values.motortype,
-                values.merk,
-                values.stock,
-                values.motorprice1day,
-                values.motorprice1week,
-                0,
-                values.status,
-                values.showstatus
+                values.discountname,
+                values.discount,
+                values.startdate,
+                values.enddate,
+                values.showstatus,
             );
 
             console.log(data);
-            toast.success('Motor berhasil ditambahkan');
+            toast.success('Diskon berhasil ditambahkan');
+            router.refresh();
         } catch (error) {
-            toast.error('Gagal menambahkan motor');
+            toast.error('Gagal menambahkan diskon');
             console.error(error);
         } finally {
             toast.dismiss(loading);
@@ -115,14 +113,14 @@ const AddMotorForm = () => {
 
     return (
         <Formik
-            initialValues={{ motorname: '', motortype: '', merk: '', stock: '', motorprice1day: '', motorprice1week: '', status: '', showstatus: '' }}
+            initialValues={{ discountname: '', discount: '', startdate: '', enddate: '', showstatus: '' }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
         >
             {({ isSubmitting }) => (
                 <Form className="flex flex-col gap-5 text-white">
                     <div className='flex flex-col gap-5 w-fit mb-5'>
-                        <h3 className='text-white text-sm'>Foto Motor</h3>
+                        <h3 className='text-white text-sm'>Foto Diskon (Optional)</h3>
                         <div className='flex flex-col gap-2 items-center'>
                             <Image
                                 alt="Profile Picture"
@@ -191,55 +189,26 @@ const AddMotorForm = () => {
                         </Modal>
                     </div>
                     <div className='flex flex-col md:flex-row gap-5 '>
-                        <InputField name="motorname" label="nama motor" type="text" placeholder="Masukkan nama motor" customClassname="w-full" required />
-                        <SelectField name="motortype" options={[{ value: 'Matic', label: 'Matic' }, { value: 'Manual', label: 'Manual' }, { value: 'Premium Matic', label: 'Premium Matic' }, { value: 'Sport', label: 'Sport' }]} label="Jenis Motor" placeholder="Pilih jenis motor" customClassname="w-full" required />
-                    </div>
-                    <div className='flex flex-col md:flex-row gap-5 '>
-                        <InputField name="merk" label="merk" type="text" placeholder="Masukkan merk motor" customClassname="w-full" required />
+                        <InputField name="discountname" label="nama diskon" type="text" placeholder="Masukkan nama diskon" customClassname="w-full" required />
                         <div className='flex flex-col gap-2 w-full'>
-                            <InputField name="stock" label="stok" type="number" placeholder="Masukkan stok motor" customClassname="w-full" required />
+                            <InputField name="discount" label="potongan harga" type="number" placeholder="Masukkan potongan harga %" customClassname="w-full" required />
                             <div className='flex items-center gap-1'>
                                 <IoInformationCircleOutline className='text-default-400' />
-                                <p className='text-default-400 text-sm'>Gunakan angka untuk memasang stok</p>
+                                <p className='text-default-400 text-sm'>Gunakan angka untuk potongan harga %</p>
                             </div>
                         </div>
                     </div>
                     <div className='flex flex-col md:flex-row gap-5 '>
-                        <div className='flex flex-col gap-2 w-full'>
-                            <InputField name="motorprice1day" label="harga motor per 1 hari" type="number" placeholder="Masukkan harga motor" customClassname="w-full" required />
-                            <div className='flex items-center gap-1'>
-                                <IoInformationCircleOutline className='text-default-400' />
-                                <p className='text-default-400 text-sm'>Gunakan angka untuk memasang stok</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-col gap-2 w-full'>
-                            <InputField name="motorprice1week" label="harga motor per 1 minggu" type="number" placeholder="Masukkan harga motor" customClassname="w-full" required />
-                            <div className='flex items-center gap-1'>
-                                <IoInformationCircleOutline className='text-default-400' />
-                                <p className='text-default-400 text-sm'>Gunakan angka untuk memasang stok</p>
-                            </div>
-                        </div>
+                        <InputField name="startdate" label="Tanggal Mulai" type="date" placeholder="Masukkan tanggal mulai" customClassname="w-full" inputClassName="text-default-500" required />
+                        <InputField name="enddate" label="Tanggal Selesai" type="date" placeholder="Masukkan tanggal selesai" customClassname="w-full" inputClassName="text-default-500" required />
                     </div>
-                    <div className='flex flex-col md:flex-row gap-5'>
-                        <div className='flex flex-col gap-2 w-full'>
-                            <SelectField name="status" options={[{ value: 'Tersedia', label: 'Tersedia' }, { value: 'Tidak Tersedia', label: 'Tidak Tersedia' }]} label="Status" placeholder="Pilih status" customClassname="w-full" required />
-                            <div className='flex items-center gap-1'>
-                                <IoInformationCircleOutline className='text-default-400' />
-                                <p className='text-default-400 text-sm'>Pastikan stok motor kosong untuk status tidak tersedia</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-col gap-2 w-full'>
-                            <SelectField name="showstatus" options={[{ value: '0', label: 'Tampilkan' }, { value: '1', label: 'Sembunyikan' }]} label="Status Tampilkan Motor" placeholder="Pilih status" customClassname="w-full" required />
-                            <div className='flex items-center gap-1'>
-                                <IoInformationCircleOutline className='text-default-400' />
-                                <p className='text-default-400 text-sm'>Pastikan stok motor kosong untuk status tidak tersedia</p>
-                            </div>
-                        </div>
+                    <div className='flex flex-col md:flex-row gap-5 '>
+                        <SelectField name="showstatus" options={[{ value: '0', label: 'Tampilkan' }, { value: '1', label: 'Sembunyikan' }]} label="Status Tampilkan Diskon" placeholder="Pilih status" customClassname="w-full" required />
                     </div>
                     <Button radius="md" className="bg-primary w-fit text-white text-sm" type="submit" isLoading={isSubmitting}>
                         Simpan
                     </Button>
-                    <Button startContent={<IoArrowBack />} radius="md" variant='bordered' className="w-fit text-white text-sm" onPress={() => handleNavigation('/admin/daftarMotor')}>
+                    <Button startContent={<IoArrowBack />} radius="md" variant='bordered' className="w-fit text-white text-sm" onPress={() => handleNavigation('/admin/daftarDiskon')}>
                         Kembali
                     </Button>
                 </Form>
@@ -248,4 +217,4 @@ const AddMotorForm = () => {
     );
 };
 
-export default AddMotorForm;
+export default AddDiscountForm;

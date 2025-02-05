@@ -10,6 +10,7 @@ import {
     TableColumn,
     TableRow,
     TableCell,
+    Tooltip,
     Button,
     Input,
     Pagination,
@@ -195,6 +196,7 @@ export default function MotorListTable() {
                     <TableColumn>Stok</TableColumn>
                     <TableColumn>Harga</TableColumn>
                     <TableColumn>Status</TableColumn>
+                    <TableColumn>Visibilitas</TableColumn>
                     <TableColumn>Aksi</TableColumn>
                 </TableHeader>
                 <TableBody>
@@ -229,16 +231,29 @@ export default function MotorListTable() {
                             </TableCell>
                             <TableCell>
                                 <Skeleton className='bg-gray-500' isLoaded={isLoaded}>
+                                    <div className={`px-5 py-1 text-white rounded-full w-fit ${item.is_hidden ? 'bg-gray' : 'bg-yellow-500'}`} >
+                                        {item.is_hidden ? 'Disembunyikan' : 'Ditampilkan'}
+                                    </div>
+                                </Skeleton>
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className='bg-gray-500' isLoaded={isLoaded}>
                                     <div className='flex'>
-                                        <Button isIconOnly onPress={() => handleNavigate("/admin/daftarMotor/detailMotor")} className="text-white mr-3 bg-blue-500">
-                                            <LuSearch size={20} />
-                                        </Button>
-                                        <Button color='warning' isIconOnly onPress={() => handleNavigate("/admin/daftarMotor/editMotor")} className="text-white mr-3">
-                                            <LuPencilLine size={20} />
-                                        </Button>
-                                        <Button color='danger' isIconOnly onPress={() => deleteId(item.id)} className="text-white mr-3">
-                                            <LuTrash size={20} />
-                                        </Button>
+                                        <Tooltip content='Detail'>
+                                            <Button isIconOnly onPress={() => handleNavigate("/admin/daftarMotor/detailMotor")} className="text-white mr-3 bg-blue-500">
+                                                <LuSearch size={20} />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip content='Edit'>
+                                            <Button color='warning' isIconOnly onPress={() => handleNavigate(`/admin/daftarMotor/editMotor/${item.id}`)} className="text-white mr-3">
+                                                <LuPencilLine size={20} />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip content='Delete'>
+                                            <Button color='danger' isIconOnly onPress={() => deleteId(item.id)} className="text-white mr-3">
+                                                <LuTrash size={20} />
+                                            </Button>
+                                        </Tooltip>
                                         <Modal
                                             backdrop="blur"
                                             isOpen={isOpen}

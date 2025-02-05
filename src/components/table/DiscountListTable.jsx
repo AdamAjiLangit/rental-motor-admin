@@ -10,6 +10,7 @@ import {
     TableColumn,
     TableRow,
     TableCell,
+    Tooltip,
     Button,
     Input,
     Pagination,
@@ -152,7 +153,7 @@ export default function DiscountListTable() {
                             color='primary'
                         />
                     </div>
-                    <Button color='primary' onPress={() => handleNavigate('/admin/daftarDiskon/tambahDiscount')}>Tambah Diskon</Button>
+                    <Button color='primary' onPress={() => handleNavigate('/admin/daftarDiskon/tambahDiskon')}>Tambah Diskon</Button>
                 </div>
             </div>
 
@@ -194,15 +195,21 @@ export default function DiscountListTable() {
                             <TableCell>
                                 <Skeleton className='bg-gray-500' isLoaded={isLoaded}>
                                     <div className='flex'>
-                                        <Button isIconOnly onPress={() => handleNavigate("/admin/daftarDiskon/detailDiskon")} className="text-white mr-3 bg-blue-500">
-                                            <LuSearch size={20} />
-                                        </Button>
-                                        <Button color='warning' isIconOnly onPress={() => handleNavigate("/admin/daftarDiskon/editDiskon")} className="text-white mr-3">
-                                            <LuPencilLine size={20} />
-                                        </Button>
-                                        <Button color='danger' isIconOnly onPress={() => deleteId(item.id)} className="text-white mr-3">
-                                            <LuTrash size={20} />
-                                        </Button>
+                                        <Tooltip content='Detail'>
+                                            <Button isIconOnly onPress={() => handleNavigate("/admin/daftarDiskon/detailDiskon")} className="text-white mr-3 bg-blue-500">
+                                                <LuSearch size={20} />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip content='Edit'>
+                                            <Button color='warning' isIconOnly onPress={() => handleNavigate("/admin/daftarDiskon/editDiskon")} className="text-white mr-3">
+                                                <LuPencilLine size={20} />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip content='Hapus'>
+                                            <Button color='danger' isIconOnly onPress={() => deleteId(item.id)} className="text-white mr-3">
+                                                <LuTrash size={20} />
+                                            </Button>
+                                        </Tooltip>
                                         <Modal
                                             backdrop="blur"
                                             isOpen={isOpen}

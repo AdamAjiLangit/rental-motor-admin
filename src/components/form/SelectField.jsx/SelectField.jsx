@@ -1,9 +1,17 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field } from 'formik';
 import { Select, SelectItem } from "@nextui-org/react";
 
-const SelectField = ({ name, options, label, placeholder, customClassname, required }) => {
+const SelectField = ({ name, options, label, placeholder, customClassname, required, value, onChange }) => {
+    const [selectedValue, setSelectedValue] = useState(value || "");
+
+    useEffect(() => {
+        if (value !== undefined) {
+            setSelectedValue(value.toString());
+        }
+    }, [value]);
+
     return (
         <Field name={name}>
             {({ field, form, meta }) => (
@@ -13,16 +21,19 @@ const SelectField = ({ name, options, label, placeholder, customClassname, requi
                         id={name}
                         name={name}
                         aria-invalid={meta.touched && !!meta.error}
-                        selectedKeys={[field.value]}
-                        onSelectionChange={(selected) =>
-                            form.setFieldValue(name, Array.from(selected)[0])
-                        }
+                        selectedKeys={[selectedValue]}
+                        onSelectionChange={(selected) => {
+                            const newValue = Array.from(selected)[0].toString();
+                            setSelectedValue(newValue);
+                            if (onChange) onChange(newValue);
+                            form.setFieldValue(name, newValue);
+                        }}
                         placeholder={placeholder}
                         isRequired={required}
                         className="mt-2 w-full"
                     >
                         {options.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
+                            <SelectItem key={option.value.toString()} value={option.value.toString()}>
                                 {option.label}
                             </SelectItem>
                         ))}

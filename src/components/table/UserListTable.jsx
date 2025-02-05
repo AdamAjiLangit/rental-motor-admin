@@ -10,6 +10,7 @@ import {
     TableColumn,
     TableRow,
     TableCell,
+    Tooltip,
     Button,
     Input,
     Pagination,
@@ -18,7 +19,7 @@ import {
     SelectItem,
 } from '@nextui-org/react';
 import { IoSearchOutline } from 'react-icons/io5';
-import { LuPencilLine, LuSearch } from "react-icons/lu";
+import { LuHistory, LuPencilLine, LuSearch } from "react-icons/lu";
 import toast from 'react-hot-toast';
 
 export default function UserListTable() {
@@ -179,12 +180,21 @@ export default function UserListTable() {
                             <TableCell>
                                 <Skeleton className='bg-gray-500' isLoaded={isLoaded}>
                                     <div className='flex'>
-                                        <Button isIconOnly onPress={() => handleNavigate("/admin/daftarUser/detailUser")} className="text-white mr-3 bg-blue-500">
-                                            <LuSearch size={20} />
-                                        </Button>
-                                        <Button color='warning' isIconOnly onPress={() => handleNavigate("/admin/daftarUser/editUser")} className="text-white mr-3">
-                                            <LuPencilLine size={20} />
-                                        </Button>
+                                        <Tooltip content='Detail'>
+                                            <Button isIconOnly onPress={() => handleNavigate("/admin/daftarUser/detailUser")} className="text-white mr-3 bg-blue-500">
+                                                <LuSearch size={20} />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip content='Edit'>
+                                            <Button color='warning' isIconOnly onPress={() => handleNavigate("/admin/daftarUser/editUser")} className="text-white mr-3">
+                                                <LuPencilLine size={20} />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip content='Riwayat Pesanan'>
+                                            <Button color='danger' isIconOnly onPress={() => handleNavigate("/admin/daftarUser/editUser")} className="text-white mr-3">
+                                                <LuHistory size={20} />
+                                            </Button>
+                                        </Tooltip>
                                     </div>
                                 </Skeleton>
                             </TableCell>

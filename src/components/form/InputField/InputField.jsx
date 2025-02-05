@@ -5,31 +5,37 @@ import { Input } from "@nextui-org/input";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
 
-const InputField = ({ name, type, label, placeholder, customClassname, inputClassName, required }) => {
+const InputField = ({
+    name,
+    type,
+    label,
+    placeholder,
+    customClassname,
+    inputClassName,
+    required,
+    value,
+    onChange
+}) => {
     const [showPassword, setShowPassword] = useState(false);
+    const isControlled = value !== undefined && onChange !== undefined;
 
     return (
         <Field name={name}>
             {({ field, meta }) => (
                 <div className={`relative ${customClassname}`}>
-                    <label htmlFor={label} className="capitalize text-sm md:text-base">{label}</label>
-                    <div className={`relative w-full mt-2 ${type === 'number' ? 'flex items-center' : ''}`}>
-                        {/* {type === 'number' && (
-                            <div className='bg-[#F4F4F5] p-[9px] rounded-xl z-50'>
-                                <span className="text-[#71717A]">+62</span>
-                            </div>
-                        )} */}
+                    <label htmlFor={name} className="capitalize text-sm md:text-base">{label}</label>
+                    <div className={`relative w-full mt-2`}>
                         <Input
                             id={name}
                             type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
                             placeholder={placeholder}
-                            {...field}
                             isRequired={required}
                             aria-invalid={meta.touched && !!meta.error}
-                            className={`w-full pl-${type === 'number' ? '12' : '4'} ${inputClassName}`}
+                            className={`w-full ${inputClassName}`}
+                            value={isControlled ? value : field.value}
+                            onChange={isControlled ? onChange : field.onChange}
                         />
                     </div>
-
                     {type === 'password' && (
                         <button
                             type="button"
