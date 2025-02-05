@@ -5,6 +5,7 @@ import { CardHoverEffect } from './Card/CardDashboard';
 import ChartComponent from './Chart/Chart';
 import { Skeleton } from '@nextui-org/react';
 import NewOrderList from './NewOrderList';
+import Link from 'next/link';
 
 const DashboardComponent = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -39,8 +40,11 @@ const DashboardComponent = () => {
                 <>
                     <h1 className='text-xl text-white font-bold tracking-wider'>Aktivitas</h1>
                     <CardHoverEffect />
-                    <div className='mt-10 mb-5'>
+                    <div className='flex gap-2 items-center mt-10 mb-5'>
                         <h1 className='text-xl text-white font-bold tracking-wider'>Pesanan Baru</h1>
+                        <Link href='/admin/orders'>
+                            <p className='text-white text-sm font-semibold'>Lihat Semua</p>
+                        </Link>
                     </div>
                     <NewOrderList />
                     <div className='mt-10 mb-5'>

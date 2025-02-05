@@ -10,6 +10,7 @@ import {
     TableColumn,
     TableRow,
     TableCell,
+    Tooltip,
     Button,
     Input,
     Pagination,
@@ -200,12 +201,16 @@ export default function HistoryListTable() {
                             <TableCell>
                                 <Skeleton className='bg-gray-500' isLoaded={isLoaded}>
                                     <div className='flex'>
-                                        <Button isIconOnly onPress={() => handleNavigate("/admin/daftarRiwayat/detailRiwayat")} className="text-white mr-3 bg-blue-500">
-                                            <LuSearch size={20} />
-                                        </Button>
-                                        <Button color='warning' isIconOnly onPress={() => handleNavigate("/admin/daftarRiwayat/editRiwayat")} className="text-white mr-3">
-                                            <LuPencilLine size={20} />
-                                        </Button>
+                                        <Tooltip content='Detail'>
+                                            <Button isIconOnly onPress={() => handleNavigate("/admin/daftarRiwayat/detailRiwayat")} className="text-white mr-3 bg-blue-500">
+                                                <LuSearch size={20} />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip content='Edit'>
+                                            <Button color='warning' isIconOnly onPress={() => handleNavigate("/admin/daftarRiwayat/editRiwayat")} className="text-white mr-3">
+                                                <LuPencilLine size={20} />
+                                            </Button>
+                                        </Tooltip>
                                     </div>
                                 </Skeleton>
                             </TableCell>

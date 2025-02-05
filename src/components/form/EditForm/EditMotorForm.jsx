@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     Card, CardHeader, CardBody, CardFooter, Divider, Image, ModalContent,
     Button,
@@ -11,33 +11,49 @@ import {
     Progress,
 } from "@nextui-org/react";
 import { Formik, Form } from 'formik';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import * as Yup from 'yup';
 import InputField from '../InputField/InputField';
 import toast from 'react-hot-toast';
 import SelectField from '../SelectField.jsx/SelectField';
 import { IoArrowBack, IoInformationCircleOutline } from 'react-icons/io5';
-import FetchAddMotor from '@/lib/CRUD/fetchAddMotor';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import FetchEditMotor from '@/lib/CRUD/fetchEditMotor';
 
-const AddMotorForm = () => {
+const EditMotorForm = () => {
+    const { id } = useParams();
     const router = useRouter();
     const pathname = usePathname();
+    const token = Cookies.get('token');
+    const userId = Cookies.get('userId');
+
+    const [motor, setMotor] = useState(null);
+    const [motorImage, setMotorImage] = useState(null);
+    const [motorName, setMotorName] = useState('');
+    const [motorType, setMotorType] = useState('');
+    const [merk, setMerk] = useState('');
+    const [stock, setStock] = useState('');
+    const [motorPrice1Day, setMotorPrice1Day] = useState('');
+    const [motorPrice1Week, setMotorPrice1Week] = useState('');
+    const [status, setStatus] = useState('');
+    const [showStatus, setShowStatus] = useState('0');
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [selectedFile, setSelectedFile] = useState(null);
     const [errMessage, setErrMessage] = useState('');
     const [uploadProgress, setUploadProgress] = useState(0);
-    const [previewUrl, setPreviewUrl] = useState("https://media.istockphoto.com/id/1441026821/vector/no-picture-available-placeholder-thumbnail-icon-illustration.jpg?s=612x612&w=0&k=20&c=7K9T9bguFyJyKOTvPkdoTWZYRWA3zGvx_xQI53BT0wg=");
-    const defaultImageUrl = "https://media.istockphoto.com/id/1441026821/vector/no-picture-available-placeholder-thumbnail-icon-illustration.jpg?s=612x612&w=0&k=20&c=7K9T9bguFyJyKOTvPkdoTWZYRWA3zGvx_xQI53BT0wg=";
+    const [previewUrl, setPreviewUrl] = useState(
+        "https://media.istockphoto.com/id/1441026821/vector/no-picture-available-placeholder-thumbnail-icon-illustration.jpg?s=612x612&w=0&k=20&c=7K9T9bguFyJyKOTvPkdoTWZYRWA3zGvx_xQI53BT0wg="
+    );
+
+    const defaultImageUrl = previewUrl;
 
     const validationSchema = Yup.object({
-        // username: Yup.string().username('Invalid username').required('username is required'),
-        // fullname: Yup.string().fullname('Invalid fullname').required('Password is required'),
-        // address: Yup.string().address('Invalid address').required('Address is required'),
-        // phone: Yup.string().phone('Invalid phone').required('Phone is required'),
+        //
     });
 
-    const handleFileChange = (event) => {
+    const handleFileChange = useCallback((event) => {
         const file = event.target.files[0];
         const maxSize = 2 * 1024 * 1024;
 
@@ -58,7 +74,7 @@ const AddMotorForm = () => {
         setPreviewUrl(URL.createObjectURL(file));
         setUploadProgress(30);
         setTimeout(() => setUploadProgress(100), 1000);
-    };
+    }, []);
 
     const handleReset = () => {
         setSelectedFile(null);
@@ -67,26 +83,51 @@ const AddMotorForm = () => {
         setUploadProgress(0);
     };
 
+    useEffect(() => {
+        const fetchDetailMotor = async () => {
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/list-motor/detail/${id}`, {
+                    headers: {
+                        Authorization: token,
+                    },
+                });
+                setMotor(response.data.listMotor);
+                setMotorName(response.data.listMotor?.nama_motor);
+                setMotorType(response.data.listMotor?.tipe_motor);
+                setMerk(response.data.listMotor?.merk_motor);
+                setStock(response.data.listMotor?.stok_motor);
+                setMotorPrice1Day(response.data.listMotor?.harga_motor_per_1_hari);
+                setMotorPrice1Week(response.data.listMotor?.harga_motor_per_1_minggu);
+                setStatus(response.data.listMotor?.status_motor);
+                setShowStatus(response.data.listMotor?.is_hidden);
+                setPreviewUrl(`${process.env.NEXT_PUBLIC_API_URL}/storage/${response.data.listMotor?.gambar_motor}`);
+                setMotorImage(`${process.env.NEXT_PUBLIC_API_URL}/storage/${response.data.listMotor?.gambar_motor}`);
+            } catch (error) {
+                console.error(error);
+            };
+        };
+
+        if(id && token) {
+            fetchDetailMotor();
+        };
+    }, [id, token]);
+
     const handleSubmit = async (values, actions) => {
         const loading = toast.loading('Loading...');
         try {
-            if (!selectedFile) {
-                toast.error("Harap unggah gambar motor!");
-                toast.dismiss(loading);
-                return;
-            };
-
-            const data = await FetchAddMotor(
+            const data = await FetchEditMotor(
+                id,
+                userId,
                 selectedFile,
-                values.motorname,
-                values.motortype,
-                values.merk,
-                values.stock,
-                values.motorprice1day,
-                values.motorprice1week,
+                motorName,
+                motorType,
+                merk,
+                stock,
+                motorPrice1Day,
+                motorPrice1Week,
                 0,
-                values.status,
-                values.showstatus
+                status,
+                showStatus
             );
 
             console.log(data);
@@ -129,7 +170,7 @@ const AddMotorForm = () => {
                                 height={100}
                                 width={100}
                                 radius="md"
-                                src={previewUrl}
+                                src={defaultImageUrl || motorImage}
                                 className="border border-gray-300"
                             />
                             <p className='text-white'>Rasio 1:1</p>
@@ -190,14 +231,14 @@ const AddMotorForm = () => {
                             </ModalContent>
                         </Modal>
                     </div>
-                    <div className='flex flex-col md:flex-row gap-5 '>
-                        <InputField name="motorname" label="nama motor" type="text" placeholder="Masukkan nama motor" customClassname="w-full" required />
-                        <SelectField name="motortype" options={[{ value: 'Matic', label: 'Matic' }, { value: 'Manual', label: 'Manual' }, { value: 'Premium Matic', label: 'Premium Matic' }, { value: 'Sport', label: 'Sport' }]} label="Jenis Motor" placeholder="Pilih jenis motor" customClassname="w-full" required />
+                    <div className='flex flex-col md:flex-row gap-5'>
+                        <InputField name="motorname" value={motorName} onChange={(e) => setMotorName(e.target.value)} label="nama motor" type="text" placeholder="Masukkan nama motor" customClassname="w-full" required />
+                        <SelectField name="motortype" value={motorType} onChange={setMotorType} options={[{ value: 'Matic', label: 'Matic' }, { value: 'Manual', label: 'Manual' }, { value: 'Premium Matic', label: 'Premium Matic' }, { value: 'Sport', label: 'Sport' }]} label="Jenis Motor" placeholder="Pilih jenis motor" customClassname="w-full" required />
                     </div>
                     <div className='flex flex-col md:flex-row gap-5 '>
-                        <InputField name="merk" label="merk" type="text" placeholder="Masukkan merk motor" customClassname="w-full" required />
+                        <InputField name="merk" value={merk} onChange={(e) => setMerk(e.target.value)} label="merk" type="text" placeholder="Masukkan merk motor" customClassname="w-full" required />
                         <div className='flex flex-col gap-2 w-full'>
-                            <InputField name="stock" label="stok" type="number" placeholder="Masukkan stok motor" customClassname="w-full" required />
+                            <InputField name="stock" label="stok" value={stock} onChange={(e) => setStock(e.target.value)} type="number" placeholder="Masukkan stok motor" customClassname="w-full" required />
                             <div className='flex items-center gap-1'>
                                 <IoInformationCircleOutline className='text-default-400' />
                                 <p className='text-default-400 text-sm'>Gunakan angka untuk memasang stok</p>
@@ -206,14 +247,14 @@ const AddMotorForm = () => {
                     </div>
                     <div className='flex flex-col md:flex-row gap-5 '>
                         <div className='flex flex-col gap-2 w-full'>
-                            <InputField name="motorprice1day" label="harga motor per 1 hari" type="number" placeholder="Masukkan harga motor" customClassname="w-full" required />
+                            <InputField name="motorprice1day" value={motorPrice1Day} onChange={(e) => setMotorPrice1Day(e.target.value)} label="harga motor per 1 hari" type="number" placeholder="Masukkan harga motor" customClassname="w-full" required />
                             <div className='flex items-center gap-1'>
                                 <IoInformationCircleOutline className='text-default-400' />
                                 <p className='text-default-400 text-sm'>Gunakan angka untuk memasang stok</p>
                             </div>
                         </div>
                         <div className='flex flex-col gap-2 w-full'>
-                            <InputField name="motorprice1week" label="harga motor per 1 minggu" type="number" placeholder="Masukkan harga motor" customClassname="w-full" required />
+                            <InputField name="motorprice1week" value={motorPrice1Week} onChange={(e) => setMotorPrice1Week(e.target.value)} label="harga motor per 1 minggu" type="number" placeholder="Masukkan harga motor" customClassname="w-full" required />
                             <div className='flex items-center gap-1'>
                                 <IoInformationCircleOutline className='text-default-400' />
                                 <p className='text-default-400 text-sm'>Gunakan angka untuk memasang stok</p>
@@ -222,14 +263,14 @@ const AddMotorForm = () => {
                     </div>
                     <div className='flex flex-col md:flex-row gap-5'>
                         <div className='flex flex-col gap-2 w-full'>
-                            <SelectField name="status" options={[{ value: 'Tersedia', label: 'Tersedia' }, { value: 'Tidak Tersedia', label: 'Tidak Tersedia' }]} label="Status" placeholder="Pilih status" customClassname="w-full" required />
+                            <SelectField name="status" value={status} onChange={setStatus} options={[{ value: 'Tersedia', label: 'Tersedia' }, { value: 'Tidak Tersedia', label: 'Tidak Tersedia' }]} label="Status" placeholder="Pilih status" customClassname="w-full" required />
                             <div className='flex items-center gap-1'>
                                 <IoInformationCircleOutline className='text-default-400' />
                                 <p className='text-default-400 text-sm'>Pastikan stok motor kosong untuk status tidak tersedia</p>
                             </div>
                         </div>
                         <div className='flex flex-col gap-2 w-full'>
-                            <SelectField name="showstatus" options={[{ value: '0', label: 'Tampilkan' }, { value: '1', label: 'Sembunyikan' }]} label="Status Tampilkan Motor" placeholder="Pilih status" customClassname="w-full" required />
+                            <SelectField name="showstatus" value={showStatus} onChange={setShowStatus} options={[{ value: '0', label: 'Tampilkan' }, { value: '1', label: 'Sembunyikan' }]} label="Status Tampilkan Motor" placeholder="Pilih status" customClassname="w-full" required />
                             <div className='flex items-center gap-1'>
                                 <IoInformationCircleOutline className='text-default-400' />
                                 <p className='text-default-400 text-sm'>Pastikan stok motor kosong untuk status tidak tersedia</p>
@@ -248,4 +289,4 @@ const AddMotorForm = () => {
     );
 };
 
-export default AddMotorForm;
+export default EditMotorForm;
